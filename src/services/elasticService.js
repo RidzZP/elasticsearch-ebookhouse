@@ -1,11 +1,11 @@
 const { Client } = require("@elastic/elasticsearch");
-const elasticsearchConfig = require("../config/elasticsearchConfig");
+const elasticConfig = require("../config/elasticConfig");
 
-const elasticsearchClient = new Client({ node: elasticsearchConfig.node });
+const elasticClient = new Client({ node: elasticConfig.node });
 
-async function testElasticsearchConnection() {
+async function testElasticConnection() {
   try {
-    const info = await elasticsearchClient.info();
+    const info = await elasticClient.info();
     console.log("Elasticsearch info:", info);
     console.log("Connection to Elasticsearch successful.");
   } catch (error) {
@@ -14,6 +14,6 @@ async function testElasticsearchConnection() {
 }
 
 module.exports = {
-  elasticsearchClient,
-  testElasticsearchConnection,
+  elasticClient,
+  testElasticConnection,
 };
