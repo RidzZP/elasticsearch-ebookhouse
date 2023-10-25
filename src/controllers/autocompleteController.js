@@ -4,7 +4,11 @@ exports.autocomplete = async (req, res) => {
   const { query } = req.query;
 
   try {
-    const [productResult, manufactureResult] = await Promise.all([
+    const [
+      productResult,
+      manufactureResult,
+      categoryResult,
+    ] = await Promise.all([
       elasticClient.search({
         index: "product",
         body: {
@@ -39,6 +43,23 @@ exports.autocomplete = async (req, res) => {
           },
         },
       }),
+      elasticClient.search({
+        index: "category",
+        body: {
+          suggest: {
+            category_suggest: {
+              prefix: query,
+              completion: {
+                field: "name.suggest",
+                size: 50,
+                fuzzy: {
+                  fuzziness: "AUTO",
+                },
+              },
+            },
+          },
+        },
+      }),
     ]);
 
     const productSuggestion = productResult.body.suggest.product_suggest[0].options.map(
@@ -58,12 +79,21 @@ exports.autocomplete = async (req, res) => {
       }
     );
 
+    const categorySuggestion = categoryResult.body.suggest.category_suggest[0].options.map(
+      (option) => {
+        return {
+          name: option.text,
+        };
+      }
+    );
+
     res.json({
       success: true,
       status: 200,
       data: {
         productSuggestion,
         manufactureSuggestion,
+        categorySuggestion,
       },
     });
   } catch (error) {
