@@ -74,6 +74,7 @@ exports.autocomplete = async (req, res) => {
     const manufactureSuggestion = manufactureResult.body.suggest.manufacture_suggest[0].options.map(
       (option) => {
         return {
+          id: option._source.manufacture_id,
           name: option.text,
         };
       }
@@ -82,6 +83,7 @@ exports.autocomplete = async (req, res) => {
     const categorySuggestion = categoryResult.body.suggest.category_suggest[0].options.map(
       (option) => {
         return {
+          id: option._source.category_id,
           name: option.text,
         };
       }
