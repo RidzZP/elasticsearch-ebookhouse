@@ -1,21 +1,27 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const { testElasticConnection } = require("./services/elasticService");
+const {
+  testElasticsearchConnection,
+} = require("./services/elasticsearchService");
 
-// Import Routes
-const autocompleteRoute = require("./routes/autocompleteRoute");
+const searchRouteBookhouse = require("./routes/searchRouteBookhouse");
+const searchJoinBookhouse = require("./routes/searchJoinBookhouse");
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
 
-// Set Endpoints
-app.use("/autocomplete", autocompleteRoute);
+app.use("/autocompleteBookhouse", searchRouteBookhouse);
+app.use("/searchBookhouse", searchJoinBookhouse);
+
+app.get("/", (req, res) => {
+  res.send("<h1>Elasticsearch API <b>ONLINE</b></h1>");
+});
 
 app.listen(port, async () => {
   try {
-    await testElasticConnection();
+    await testElasticsearchConnection();
     console.log(`Server berjalan di http://localhost:${port}`);
   } catch (error) {
     console.error(`Error connecting to Elasticsearch: ${error.message}`);
