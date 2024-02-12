@@ -1,3 +1,3 @@
 module.exports = {
-  node: "http://localhost:9200",
+  node: "http://103.235.73.12:9228",
 };
