@@ -5,7 +5,7 @@ exports.autocompleteBookhouse = async (req, res) => {
     let { q } = req.query;
     const size = parseInt(req.query.size) || 15;
 
-    const [productSearch, manufactureSearch, categorySearch] =
+    const [productSearch, categorySearch, manufactureSearch] =
       await Promise.all([
         elasticsearchClient.search({
           index: "product",
